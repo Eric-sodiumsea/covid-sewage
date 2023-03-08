@@ -1,11 +1,9 @@
 package com.sztu.covid19.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sztu.covid19.Common.Result;
-import com.sztu.covid19.entity.PlaceRelation;
-import com.sztu.covid19.entity.PlaceResult;
-import com.sztu.covid19.entity.VirusResult;
-import com.sztu.covid19.entity.VirusSimpleResult;
+import com.sztu.covid19.entity.*;
 import com.sztu.covid19.service.PlaceService;
 import com.sztu.covid19.service.VirusService;
 import com.sztu.covid19.service.impl.VirusServiceImpl;
@@ -37,6 +35,16 @@ public class PlaceController {
     private PlaceService placeService;
     @Resource
     private VirusService virusService;
+
+    // 查询所有地点名称test
+    @GetMapping("/listName1")
+    public List<Place> listName1() {
+
+        QueryWrapper<Place> wrapper = new QueryWrapper<>();
+        wrapper.select("id", "place_name");
+        List<Place> list = placeService.list(wrapper);
+        return list;
+    }
 
     // 查询所有地点名称
     @GetMapping("/listName")
