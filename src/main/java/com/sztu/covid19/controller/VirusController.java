@@ -38,16 +38,16 @@ public class VirusController {
 
     // 根据日期范围查询
     @GetMapping("/listDate")  // listD = list + Date
-    public Result listDate(@RequestParam("beginDate") String beginDate, @RequestParam("endDate") String endDate, @RequestParam("placeId") Integer placeId) throws ParseException {
+    public Result listDate(@RequestParam(value = "beginDate", defaultValue = "null") String beginDate, @RequestParam(value = "endDate", defaultValue = "null") String endDate, @RequestParam("placeId") Integer placeId) throws ParseException {
 
         // 格式化日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         // 处理日期
-        if (beginDate == null) {
+        if (beginDate.equals("null")) {
             beginDate = "0001-01-01";
         }
-        if (endDate == null) {
+        if (endDate.equals("null")) {
             // 今天
             Calendar today = Calendar.getInstance();
             endDate = sdf.format(today.getTime());
@@ -72,7 +72,7 @@ public class VirusController {
 
         // 得到过去7天内各天的总CT值
         List<VirusResult> result7Days = virusService.listDate(last7Day, endDate, placeId);
-        System.out.println(result7Days);
+        System.out.println("过去7天内各天的总CT值：" + result7Days);
 
         // 过去7天内的总CT值
         Double totalCT7 = 0.0;

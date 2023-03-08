@@ -31,16 +31,16 @@ public class InfectedController {
 
     // 根据日期范围查询
     @GetMapping("/listDate")
-    public Result listDate(@RequestParam("beginDate") String beginDate, @RequestParam("endDate") String endDate, @RequestParam("placeId") Integer placeId) throws ParseException {
+    public Result listDate(@RequestParam(value = "beginDate", defaultValue = "null") String beginDate, @RequestParam(value = "endDate", defaultValue = "null") String endDate, @RequestParam("placeId") Integer placeId) throws ParseException {
 
         // 格式化日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         // 处理日期
-        if (beginDate == null) {
+        if (beginDate.equals("null")) {
             beginDate = "0001-01-01";
         }
-        if (endDate == null) {
+        if (endDate.equals("null")) {
             Calendar today = Calendar.getInstance();
             endDate = sdf.format(today.getTime());
         }
@@ -65,7 +65,7 @@ public class InfectedController {
 
         // 得到过去7天内各天的总感染人数
         List<InfectedResult> result7Days = infectedService.listDate(last7Day, endDate, placeId);
-        System.out.println(result7Days);
+        System.out.println("过去7天内各天的总感染人数：" + result7Days);
 
         // 过去7天内的总感染人数
         Double total7 = 0.0;

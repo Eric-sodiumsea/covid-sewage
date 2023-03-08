@@ -23,14 +23,14 @@
     </select>
 
     <!-- 查询（大范围）地点的经纬度 -->
-    <select id="listPos" resultType="com.sztu.covid19.entity.PlaceDetail">
+    <select id="listPos" resultType="com.sztu.covid19.entity.Place">
         select id, place_name, longitude, latitude
         from place
         order by place_name
     </select>
 
     <!-- 查询（小范围）地点的经纬度 -->
-    <select id="listPosDetail" resultType="com.sztu.covid19.entity.PlaceDetail">
+    <select id="listPosDetail" resultType="com.sztu.covid19.entity.Place">
         select id, place_name, longitude, latitude
         from place_detail
         where father_id = #{fatherId}
