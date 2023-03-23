@@ -10,4 +10,5 @@ public class PlaceNameResult {
 
     private Integer id;
     private String placeName;
+    private List<PlaceDetail> placeDetail;
 }

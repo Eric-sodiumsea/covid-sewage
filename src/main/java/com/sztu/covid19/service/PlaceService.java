@@ -1,6 +1,5 @@
 package com.sztu.covid19.service;
 
-import com.sztu.covid19.entity.InfectedResult;
 import com.sztu.covid19.entity.Place;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sztu.covid19.entity.PlaceResult;
@@ -16,9 +15,6 @@ import java.util.List;
  * @since 2023-02-08
  */
 public interface PlaceService extends IService<Place> {
-
-    // 查询所有地点名称
-    List<Place> listName();
 
     // 查询（大范围）地点的经纬度
     List<Place> listPos();

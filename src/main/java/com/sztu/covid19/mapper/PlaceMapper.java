@@ -18,9 +18,6 @@ import java.util.List;
 @Mapper
 public interface PlaceMapper extends BaseMapper<Place> {
 
-    // 查询所有地点名称
-    List<Place> listName();
-
     // 查询（大范围）地点的经纬度
     List<Place> listPos();
 

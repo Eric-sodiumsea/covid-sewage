@@ -27,13 +27,6 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceMapper, Place> implements
     private PlaceMapper placeMapper;
 
     @Override
-    // 查询所有地点名称
-    public List<Place> listName() {
-
-        return placeMapper.listName();
-    }
-
-    @Override
     // 查询（大范围）地点的经纬度
     public List<Place> listPos() {
 

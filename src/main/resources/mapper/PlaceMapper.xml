@@ -15,13 +15,6 @@
         id, place_name, longitude, latitude
     </sql>
 
-    <!-- 查询所有地点名称 -->
-    <select id="listName" resultType="com.sztu.covid19.entity.PlaceNameResult">
-        select id, place_name
-        from place_detail
-        order by place_name
-    </select>
-
     <!-- 查询（大范围）地点的经纬度 -->
     <select id="listPos" resultType="com.sztu.covid19.entity.Place">
         select id, place_name, longitude, latitude

@@ -2,6 +2,7 @@ package com.sztu.covid19.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Place对象", description="")
+@JsonInclude(JsonInclude.Include.NON_NULL) // 后加的，不返回NULL的字段
 public class PlaceDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;

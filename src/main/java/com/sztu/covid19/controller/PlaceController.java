@@ -4,10 +4,9 @@ package com.sztu.covid19.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sztu.covid19.Common.Result;
 import com.sztu.covid19.entity.*;
+import com.sztu.covid19.service.PlaceDetailService;
 import com.sztu.covid19.service.PlaceService;
 import com.sztu.covid19.service.VirusService;
-import com.sztu.covid19.service.impl.VirusServiceImpl;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,23 +33,37 @@ public class PlaceController {
     @Resource
     private PlaceService placeService;
     @Resource
+    private PlaceDetailService placeDetailService;
+    @Resource
     private VirusService virusService;
-
-    // 查询所有地点名称test
-    @GetMapping("/listName1")
-    public List<Place> listName1() {
-
-        QueryWrapper<Place> wrapper = new QueryWrapper<>();
-        wrapper.select("id", "place_name");
-        List<Place> list = placeService.list(wrapper);
-        return list;
-    }
 
     // 查询所有地点名称
     @GetMapping("/listName")
-    public Result listName() {
+    public List<PlaceNameResult> listName1() {
 
-        return Result.suc(placeService.listName());
+        List<PlaceNameResult> placeNameResultList = new ArrayList<>();
+
+        QueryWrapper<Place> wrapper = new QueryWrapper<>();
+        wrapper.select("id", "place_name");
+        List<Place> placeList = placeService.list(wrapper);
+
+        for (Place place : placeList) {
+
+            QueryWrapper<PlaceDetail> wrapperDetail = new QueryWrapper<>();
+            wrapperDetail.select("id", "place_name");
+            wrapperDetail.eq("father_id", place.getId());
+            List<PlaceDetail> placeDetailList = placeDetailService.list(wrapperDetail);
+
+            PlaceNameResult placeNameResult = new PlaceNameResult();
+
+            placeNameResult.setId(place.getId());
+            placeNameResult.setPlaceName(place.getPlaceName());
+            placeNameResult.setPlaceDetail(placeDetailList);
+
+            placeNameResultList.add(placeNameResult);
+        }
+
+        return placeNameResultList;
     }
 
     // 查询（大范围）地点的经纬度
@@ -97,16 +110,7 @@ public class PlaceController {
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
             List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
-
-            List<VirusSimpleResult> virusSimpleResultList = new ArrayList<>();
-            for (VirusResult virusResult : virusResultMonthList) {
-                VirusSimpleResult virusSimpleResult = new VirusSimpleResult();
-                virusSimpleResult.setDate(virusResult.getDate());
-                virusSimpleResult.setTotalCT(virusResult.getTotalCT());
-                virusSimpleResultList.add(virusSimpleResult);
-            }
-
-            placeResult.setMonthList(virusSimpleResultList);
+            placeResult.setMonthList(virusResultMonthList);
         }
 
         return Result.suc(result);
@@ -142,16 +146,7 @@ public class PlaceController {
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
             List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
-
-            List<VirusSimpleResult> virusSimpleResultList = new ArrayList<>();
-            for (VirusResult virusResult : virusResultMonthList) {
-                VirusSimpleResult virusSimpleResult = new VirusSimpleResult();
-                virusSimpleResult.setDate(virusResult.getDate());
-                virusSimpleResult.setTotalCT(virusResult.getTotalCT());
-                virusSimpleResultList.add(virusSimpleResult);
-            }
-
-            placeResult.setMonthList(virusSimpleResultList);
+            placeResult.setMonthList(virusResultMonthList);
         }
 
         return Result.suc(result);

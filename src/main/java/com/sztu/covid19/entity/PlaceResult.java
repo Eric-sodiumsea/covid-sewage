@@ -10,5 +10,5 @@ public class PlaceResult {
 
     private Integer id;
     private String placeName;
-    private List<VirusSimpleResult> monthList = new ArrayList<>();
+    private List<VirusResult> monthList = new ArrayList<>();
 }
