@@ -8,20 +8,20 @@
         <result column="name" property="name"/>
         <result column="date" property="date"/>
         <result column="quantity" property="quantity"/>
-        <result column="place" property="place"/>
+        <result column="place_detail_id" property="place_detail_id"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        , name, date, quantity, place
+        , name, date, quantity, place_detail_id
     </sql>
 
     <!-- 根据日期范围查询结果 -->
     <select id="listDate" parameterType="com.sztu.covid19.entity.Virus" resultType="com.sztu.covid19.entity.VirusResult">
         select date, sum(quantity) as totalCT
         from virus
-        where place_id = #{placeId}
+        where place_detail_id = #{placeId}
           and date between #{beginDate}
           and #{endDate}
         group by date

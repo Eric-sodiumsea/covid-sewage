@@ -7,5 +7,4 @@ public class InfectedResult {
 
     private String date;
     private Integer total;
-    private Integer placeId;
 }

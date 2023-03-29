@@ -9,24 +9,24 @@
         <result column="date" property="date"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
-        <result column="place" property="place"/>
+        <result column="place_detail_id" property="place_detail_id"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        , name, date, sex, age, place
+        , name, date, sex, age, place_detail_id
     </sql>
 
     <!-- 根据日期范围查询结果 -->
     <select id="listDate" parameterType="com.sztu.covid19.entity.Infected" resultType="com.sztu.covid19.entity.InfectedResult">
-        select date, count(id) as total, place_id
+        select date, count(id) as total
         from infected
-        where place_id = #{placeId}
+        where place_detail_id = #{placeId}
           and date between #{beginDate}
           and #{endDate}
-        group by date, place_id
-        order by date, place_id
+        group by date
+        order by date
     </select>
 
 </mapper>

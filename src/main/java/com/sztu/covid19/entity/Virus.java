@@ -40,7 +40,7 @@ public class Virus implements Serializable {
     private Integer quantity;
 
     @ApiModelProperty(value = "对应的地点的id")
-    private Integer placeId;
+    private Integer placeDetailId;
 
     @ApiModelProperty("某天")
     @TableField(exist = false, select = false)

@@ -38,7 +38,7 @@ public class VirusController {
 
     // 根据日期范围查询
     @GetMapping("/listDate")  // listD = list + Date
-    public Result listDate(@RequestParam(value = "beginDate", defaultValue = "null") String beginDate, @RequestParam(value = "endDate", defaultValue = "null") String endDate, @RequestParam("placeId") Integer placeId) throws ParseException {
+    public Result listDate(@RequestParam(value = "beginDate", defaultValue = "null") String beginDate, @RequestParam(value = "endDate", defaultValue = "null") String endDate, @RequestParam("placeId") Integer placeId/*place_detail_id*/) throws ParseException {
 
         // 格式化日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

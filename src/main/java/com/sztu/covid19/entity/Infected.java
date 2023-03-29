@@ -43,7 +43,7 @@ public class Infected implements Serializable {
     private Integer age;
 
     @ApiModelProperty(value = "对应的地点的id")
-    private Integer placeId;
+    private Integer placeDetailId;
 
     @ApiModelProperty("开始时间")
     @TableField(exist = false, select = false)
