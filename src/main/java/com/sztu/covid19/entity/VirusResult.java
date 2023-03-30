@@ -6,5 +6,5 @@ import lombok.Data;
 public class VirusResult {
 
     private String date;
-    private Integer totalCT;
+    private Double totalCT;
 }

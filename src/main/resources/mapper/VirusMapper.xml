@@ -19,7 +19,7 @@
 
     <!-- 根据日期范围查询结果 -->
     <select id="listDate" parameterType="com.sztu.covid19.entity.Virus" resultType="com.sztu.covid19.entity.VirusResult">
-        select date, sum(quantity) as totalCT
+        select date, sum(ct) as totalCT
         from virus
         where place_detail_id = #{placeId}
           and date between #{beginDate}
