@@ -24,7 +24,8 @@
     <select id="listDate" parameterType="com.sztu.covid19.entity.Virus" resultType="com.sztu.covid19.entity.VirusResult">
         select date, sum(ct1) as totalCT
         from virus
-        where place_detail_id = #{placeId}
+        where ct1 is not null
+          and place_detail_id = #{placeId}
           and date between #{beginDate}
           and #{endDate}
         group by date
