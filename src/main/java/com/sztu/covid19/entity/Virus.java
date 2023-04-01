@@ -36,8 +36,14 @@ public class Virus implements Serializable {
 
     private String date;
 
-    @ApiModelProperty(value = "CT值")
-    private Double quantity;
+    @ApiModelProperty(value = "CT值1")
+    private Double ct1;
+    @ApiModelProperty(value = "CT值2")
+    private Double ct2;
+    @ApiModelProperty(value = "CT值3")
+    private Double ct3;
+    @ApiModelProperty(value = "CT值4")
+    private Double ct4;
 
     @ApiModelProperty(value = "对应的地点的id")
     private Integer placeDetailId;
