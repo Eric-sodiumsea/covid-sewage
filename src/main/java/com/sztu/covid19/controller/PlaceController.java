@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -95,14 +92,14 @@ public class PlaceController {
         Calendar today = Calendar.getInstance();
         endDate = sdf.format(today.getTime());
 
-        // 获取一个月前的日期
-        Calendar endDate1 = Calendar.getInstance();
-        Date endDate2 = sdf.parse(endDate);
-        endDate1.setTime(endDate2);
-        endDate1.add(Calendar.MONTH, -1);
-        endDate1.add(Calendar.DAY_OF_YEAR, 1);
-        Date endDate3 = endDate1.getTime();
-        beginDate = sdf.format(endDate3);
+        // 获取一个月前的日期（beginDate = endDate - 1month）
+        Calendar beginDate1 = Calendar.getInstance();
+        Date beginDate2 = sdf.parse(endDate);
+        beginDate1.setTime(beginDate2);
+        beginDate1.add(Calendar.MONTH, -1);
+        beginDate1.add(Calendar.DAY_OF_YEAR, 1);
+        Date beginDate3 = beginDate1.getTime();
+        beginDate = sdf.format(beginDate3);
 
         // 得到（大范围）所有建筑
         List<PlaceResult> result = placeService.listMonth(beginDate, endDate);
@@ -131,14 +128,92 @@ public class PlaceController {
         Calendar today = Calendar.getInstance();
         endDate = sdf.format(today.getTime());
 
-        // 获取一个月前的日期
-        Calendar endDate1 = Calendar.getInstance();
-        Date endDate2 = sdf.parse(endDate);
-        endDate1.setTime(endDate2);
-        endDate1.add(Calendar.MONTH, -1);
-        endDate1.add(Calendar.DAY_OF_YEAR, 1);
-        Date endDate3 = endDate1.getTime();
-        beginDate = sdf.format(endDate3);
+        // 获取一个月前的日期（beginDate = endDate - 1month）
+        Calendar beginDate1 = Calendar.getInstance();
+        Date beginDate2 = sdf.parse(endDate);
+        beginDate1.setTime(beginDate2);
+        beginDate1.add(Calendar.MONTH, -1);
+        beginDate1.add(Calendar.DAY_OF_YEAR, 1);
+        Date beginDate3 = beginDate1.getTime();
+        beginDate = sdf.format(beginDate3);
+
+        // 得到（小范围）所有建筑
+        List<PlaceResult> result = placeService.listMonthDetail(fatherId, beginDate, endDate);
+
+        // 得到每个建筑最近一个月内各天的总CT值
+        for (PlaceResult placeResult : result) {
+            List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
+            placeResult.setMonthList(virusResultMonthList);
+        }
+
+        return Result.suc(result);
+    }
+
+    // 获取（大范围）所有建筑的最近日期的最近一个月的CT值
+    @GetMapping("/listMonth1")
+    public Result listMonth1() throws ParseException {
+
+        // 格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // 最近一个月
+        String beginDate;
+        String endDate;
+
+        // 获取最近的日期
+        QueryWrapper<Virus> wrapper = new QueryWrapper<>();
+        wrapper.select("max(date) as endDate");
+        Map<String, Object> map = virusService.getMap(wrapper);
+        endDate = map.get("endDate").toString();
+
+        // 获取一个月前的日期（beginDate = endDate - 1month）
+        Calendar beginDate1 = Calendar.getInstance();
+        Date beginDate2 = sdf.parse(endDate);
+        beginDate1.setTime(beginDate2);
+        beginDate1.add(Calendar.MONTH, -1);
+        beginDate1.add(Calendar.DAY_OF_YEAR, 1);
+        Date beginDate3 = beginDate1.getTime();
+        beginDate = sdf.format(beginDate3);
+
+        // 得到（大范围）所有建筑
+        List<PlaceResult> result = placeService.listMonth(beginDate, endDate);
+
+        // 得到每个建筑最近一个月内各天的总CT值
+        for (PlaceResult placeResult : result) {
+            List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
+            placeResult.setMonthList(virusResultMonthList);
+        }
+
+        return Result.suc(result);
+    }
+
+    // 获取（小范围）所有建筑的最近日期的最近一个月的CT值
+    @GetMapping("/listMonthDetail1")
+    public Result listMonthDetail1(@RequestParam("fatherId") Integer fatherId) throws ParseException {
+
+        // 格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // 最近一个月
+        String beginDate;
+        String endDate;
+
+        // 获取最近的日期
+        QueryWrapper<Virus> wrapper = new QueryWrapper<>();
+        wrapper.eq("place_detail_id", fatherId);
+        wrapper.select("max(date) as endDate");
+        Map<String, Object> map = virusService.getMap(wrapper);
+        endDate = map.get("endDate").toString();
+        System.out.println(endDate);
+
+        // 获取一个月前的日期（beginDate = endDate - 1month）
+        Calendar beginDate1 = Calendar.getInstance();
+        Date beginDate2 = sdf.parse(endDate);
+        beginDate1.setTime(beginDate2);
+        beginDate1.add(Calendar.MONTH, -1);
+        beginDate1.add(Calendar.DAY_OF_YEAR, 1);
+        Date beginDate3 = beginDate1.getTime();
+        beginDate = sdf.format(beginDate3);
 
         // 得到（小范围）所有建筑
         List<PlaceResult> result = placeService.listMonthDetail(fatherId, beginDate, endDate);

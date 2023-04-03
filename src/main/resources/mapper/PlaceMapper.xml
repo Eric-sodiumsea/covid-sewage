@@ -30,7 +30,7 @@
         order by place_name
     </select>
 
-    <!-- 获取（大范围）所有建筑最近一个月的污水载量 -->
+    <!-- 获取（大范围）所有建筑最近一个月的CT值 -->
     <select id="listMonth" resultType="com.sztu.covid19.entity.PlaceResult">
         select id, place_name
         from place_detail
