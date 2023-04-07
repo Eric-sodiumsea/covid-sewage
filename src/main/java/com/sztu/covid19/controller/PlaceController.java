@@ -203,8 +203,14 @@ public class PlaceController {
         wrapper.eq("place_detail_id", fatherId);
         wrapper.select("max(date) as endDate");
         Map<String, Object> map = virusService.getMap(wrapper);
-        endDate = map.get("endDate").toString();
-        System.out.println(endDate);
+
+        if (map == null) {
+            // 如果该place_detail没有数据，则直接令endDate等于今天
+            Calendar today = Calendar.getInstance();
+            endDate = sdf.format(today.getTime());
+        } else {
+            endDate = map.get("endDate").toString();
+        }
 
         // 获取一个月前的日期（beginDate = endDate - 1month）
         Calendar beginDate1 = Calendar.getInstance();
