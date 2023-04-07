@@ -25,9 +25,9 @@ public interface PlaceMapper extends BaseMapper<Place> {
     List<Place> listPosDetail(Integer fatherId);
 
     // 获取（大范围）所有建筑最近一个月的污水载量
-    List<PlaceResult> listMonth(String beginDate, String endDate);
+    List<PlaceResult> listMonth();
 
     // 获取（小范围）所有建筑最近一个月的污水载量
-    List<PlaceResult> listMonthDetail(Integer fatherId, String beginDate, String endDate);
+    List<PlaceResult> listMonthDetail(Integer fatherId);
 
 }

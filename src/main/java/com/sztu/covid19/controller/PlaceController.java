@@ -102,7 +102,7 @@ public class PlaceController {
         beginDate = sdf.format(beginDate3);
 
         // 得到（大范围）所有建筑
-        List<PlaceResult> result = placeService.listMonth(beginDate, endDate);
+        List<PlaceResult> result = placeService.listMonth();
 
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
@@ -138,7 +138,7 @@ public class PlaceController {
         beginDate = sdf.format(beginDate3);
 
         // 得到（小范围）所有建筑
-        List<PlaceResult> result = placeService.listMonthDetail(fatherId, beginDate, endDate);
+        List<PlaceResult> result = placeService.listMonthDetail(fatherId);
 
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
@@ -176,7 +176,7 @@ public class PlaceController {
         beginDate = sdf.format(beginDate3);
 
         // 得到（大范围）所有建筑
-        List<PlaceResult> result = placeService.listMonth(beginDate, endDate);
+        List<PlaceResult> result = placeService.listMonth();
 
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
@@ -216,7 +216,7 @@ public class PlaceController {
         beginDate = sdf.format(beginDate3);
 
         // 得到（小范围）所有建筑
-        List<PlaceResult> result = placeService.listMonthDetail(fatherId, beginDate, endDate);
+        List<PlaceResult> result = placeService.listMonthDetail(fatherId);
 
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {

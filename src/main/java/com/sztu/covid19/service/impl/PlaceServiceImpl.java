@@ -42,15 +42,15 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceMapper, Place> implements
 
     @Override
     // 获取（大范围）所有建筑最近一个月的污水载量
-    public List<PlaceResult> listMonth(String beginDate, String endDate) {
+    public List<PlaceResult> listMonth() {
 
-        return placeMapper.listMonth(beginDate, endDate);
+        return placeMapper.listMonth();
     }
 
     @Override
     // 获取（小范围）所有建筑最近一个月的污水载量
-    public List<PlaceResult> listMonthDetail(Integer fatherId, String beginDate, String endDate) {
+    public List<PlaceResult> listMonthDetail(Integer fatherId) {
 
-        return placeMapper.listMonthDetail(fatherId, beginDate, endDate);
+        return placeMapper.listMonthDetail(fatherId);
     }
 }
