@@ -224,12 +224,18 @@ public class PlaceController {
         // 得到（小范围）所有建筑
         List<PlaceResult> result = placeService.listMonthDetail(fatherId);
 
+        // 所有点位中最晚的日期
+        String latestDate = "0000-00-00";
+
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
             List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
+            if (virusResultMonthList.size() != 0 && virusResultMonthList.get(virusResultMonthList.size()-1).getDate().compareTo(latestDate) > 0) {
+                latestDate = virusResultMonthList.get(virusResultMonthList.size()-1).getDate();
+            }
             placeResult.setMonthList(virusResultMonthList);
         }
 
-        return Result.suc(result);
+        return Result.suc(result, latestDate=="0000-00-00" ? null : latestDate);
     }
 }

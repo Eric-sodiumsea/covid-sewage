@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztu.covid19.mapper.VirusMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sztu.covid19.entity.Virus">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="date" property="date"/>
+        <result column="ct1" property="ct1"/>
+        <result column="ct2" property="ct2"/>
+        <result column="ct3" property="ct3"/>
+        <result column="ct4" property="ct4"/>
+        <result column="place_detail_id" property="place_detail_id"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, date, ct1, ct2, ct3, ct4, place_detail_id
+    </sql>
+
+    <!-- 根据日期范围查询结果 -->
+    <select id="listDate" parameterType="com.sztu.covid19.entity.Virus" resultType="com.sztu.covid19.entity.VirusResult">
+        select date, sum(ct1) as totalCT
+        from virus
+        where ct1 is not null
+          and place_detail_id = #{placeId}
+          and date between #{beginDate}
+          and #{endDate}
+        group by date
+        order by date
+    </select>
+
+</mapper>
