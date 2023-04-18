@@ -191,25 +191,32 @@ public class PlaceController {
     @GetMapping("/listMonthDetail1")
     public Result listMonthDetail1(@RequestParam("fatherId") Integer fatherId) throws ParseException {
 
+        // 得到（小范围）所有建筑
+        List<PlaceResult> result = placeService.listMonthDetail(fatherId);
+
         // 格式化日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         // 最近一个月
         String beginDate;
-        String endDate;
+        String endDate = "0000-00-00";
 
-        // 获取最近的日期
-        QueryWrapper<Virus> wrapper = new QueryWrapper<>();
-        wrapper.eq("place_detail_id", fatherId);
-        wrapper.select("max(date) as endDate");
-        Map<String, Object> map = virusService.getMap(wrapper);
+        for (PlaceResult placeResult : result) {
+            // 获取最近的日期
+            QueryWrapper<Virus> wrapper = new QueryWrapper<>();
+            wrapper.isNotNull("ct1");
+            wrapper.eq("place_detail_id", placeResult.getId());
+            wrapper.select("max(date) as endDate");
+            Map<String, Object> map = virusService.getMap(wrapper);
+            if (map != null && map.get("endDate").toString().compareTo(endDate) > 0) {
+                endDate = map.get("endDate").toString();
+            }
+        }
 
-        if (map == null) {
+        if (endDate == "0000-00-00") {
             // 如果该place_detail没有数据，则直接令endDate等于今天
             Calendar today = Calendar.getInstance();
             endDate = sdf.format(today.getTime());
-        } else {
-            endDate = map.get("endDate").toString();
         }
 
         // 获取一个月前的日期（beginDate = endDate - 1month）
@@ -220,9 +227,6 @@ public class PlaceController {
         beginDate1.add(Calendar.DAY_OF_YEAR, 1);
         Date beginDate3 = beginDate1.getTime();
         beginDate = sdf.format(beginDate3);
-
-        // 得到（小范围）所有建筑
-        List<PlaceResult> result = placeService.listMonthDetail(fatherId);
 
         // 所有点位中最晚的日期
         String latestDate = "0000-00-00";
@@ -236,6 +240,6 @@ public class PlaceController {
             placeResult.setMonthList(virusResultMonthList);
         }
 
-        return Result.suc(result, latestDate=="0000-00-00" ? null : latestDate);
+        return Result.suc(result, latestDate);
     }
 }
