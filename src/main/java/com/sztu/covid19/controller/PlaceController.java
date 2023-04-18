@@ -153,18 +153,33 @@ public class PlaceController {
     @GetMapping("/listMonth1")
     public Result listMonth1() throws ParseException {
 
+        // 得到（大范围）所有建筑
+        List<PlaceResult> result = placeService.listMonth();
+
         // 格式化日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         // 最近一个月
         String beginDate;
-        String endDate;
+        String endDate = "0000-00-00";
 
-        // 获取最近的日期
-        QueryWrapper<Virus> wrapper = new QueryWrapper<>();
-        wrapper.select("max(date) as endDate");
-        Map<String, Object> map = virusService.getMap(wrapper);
-        endDate = map.get("endDate").toString();
+        for (PlaceResult placeResult : result) {
+            // 获取最近的日期
+            QueryWrapper<Virus> wrapper = new QueryWrapper<>();
+            wrapper.isNotNull("ct1");
+            wrapper.eq("place_detail_id", placeResult.getId());
+            wrapper.select("max(date) as endDate");
+            Map<String, Object> map = virusService.getMap(wrapper);
+            if (map != null && map.get("endDate").toString().compareTo(endDate) > 0) {
+                endDate = map.get("endDate").toString();
+            }
+        }
+
+        if (endDate == "0000-00-00") {
+            // 如果该place_detail没有数据，则直接令endDate等于今天
+            Calendar today = Calendar.getInstance();
+            endDate = sdf.format(today.getTime());
+        }
 
         // 获取一个月前的日期（beginDate = endDate - 1month）
         Calendar beginDate1 = Calendar.getInstance();
@@ -175,16 +190,19 @@ public class PlaceController {
         Date beginDate3 = beginDate1.getTime();
         beginDate = sdf.format(beginDate3);
 
-        // 得到（大范围）所有建筑
-        List<PlaceResult> result = placeService.listMonth();
+        // 所有点位中最晚的日期
+        String latestDate = "0000-00-00";
 
         // 得到每个建筑最近一个月内各天的总CT值
         for (PlaceResult placeResult : result) {
             List<VirusResult> virusResultMonthList = virusService.listDate(beginDate, endDate, placeResult.getId());
+            if (virusResultMonthList.size() != 0 && virusResultMonthList.get(virusResultMonthList.size()-1).getDate().compareTo(latestDate) > 0) {
+                latestDate = virusResultMonthList.get(virusResultMonthList.size()-1).getDate();
+            }
             placeResult.setMonthList(virusResultMonthList);
         }
 
-        return Result.suc(result);
+        return Result.suc(result, latestDate);
     }
 
     // 获取（小范围）所有建筑的最近日期的最近一个月的CT值
